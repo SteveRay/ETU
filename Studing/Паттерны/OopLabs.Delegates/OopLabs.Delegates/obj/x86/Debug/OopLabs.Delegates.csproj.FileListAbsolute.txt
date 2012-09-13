@@ -1,5 +1,0 @@
-C:\Users\Администратор\Documents\Visual Studio 2010\Projects\OOP_Forms\OopLabs.Delegates\OopLabs.Delegates\bin\Debug\OopLabs.Delegates.exe
-C:\Users\Администратор\Documents\Visual Studio 2010\Projects\OOP_Forms\OopLabs.Delegates\OopLabs.Delegates\bin\Debug\OopLabs.Delegates.pdb
-C:\Users\Администратор\Documents\Visual Studio 2010\Projects\OOP_Forms\OopLabs.Delegates\OopLabs.Delegates\obj\x86\Debug\ResolveAssemblyReference.cache
-C:\Users\Администратор\Documents\Visual Studio 2010\Projects\OOP_Forms\OopLabs.Delegates\OopLabs.Delegates\obj\x86\Debug\OopLabs.Delegates.exe
-C:\Users\Администратор\Documents\Visual Studio 2010\Projects\OOP_Forms\OopLabs.Delegates\OopLabs.Delegates\obj\x86\Debug\OopLabs.Delegates.pdb
