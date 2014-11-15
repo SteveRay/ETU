@@ -26,9 +26,7 @@ function [state, options,optchanged] = plotOutputs(options,state,flag)
 
      switch flag
          case 'init'
-             disp('Starting the algorithm');
          case {'iter','interrupt'}
-            disp('Iterating ...')
          case 'done'
             disp('Performing final task');
         otherwise;

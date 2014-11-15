@@ -3,11 +3,10 @@ PATH = 'D:\Education\SPbETU\MD\EvoFIT\GA\База лиц\Faces94\';
 K = 1;
 L = 20;
 p = 20;
-a = 1;
 ORIG_FACE_PATH = 'D:\Education\SPbETU\MD\EvoFIT\GA\Sketch_generator\001.jpg';
 %------------- Инициализация класса ---------------------------------------
 global gpfm;
-gpfm = GA_PCA_FACE_MORPFER(PATH, K, L, p, a, ORIG_FACE_PATH);
+gpfm = GA_PCA_FACE_MORPFER(PATH, K, L, p, ORIG_FACE_PATH);
 %------------ Задание опций алгоритма--------------------------------------
 options = gaoptimset('PopulationType', 'doubleVector',...
     'InitialPopulation', gpfm.RED,...

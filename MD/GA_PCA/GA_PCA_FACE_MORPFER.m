@@ -9,9 +9,6 @@ classdef GA_PCA_FACE_MORPFER < handle
     % начальной базы лиц (PCA).
     % - Функция computeFitness() используется ga для вычисления оценочного 
     % коэффициента.
-    % - eliminateBackground() функция предобработки исходных изображений, в
-    % которой происходит размытие контуров выходящих за область интересов
-    % и получение "овала лица".
     % Используются следующие внешние функции: norma(), PCA_KL(), ssim_index().
     
     % Переменные класса
@@ -21,7 +18,6 @@ classdef GA_PCA_FACE_MORPFER < handle
         K;
         L;
         p;
-        a;
         A_KLT;
         INV_A_KLT;
         RED;
@@ -43,16 +39,15 @@ classdef GA_PCA_FACE_MORPFER < handle
         % @L - количество образов в каждом классе.
         % @p - количество наибольших собственных чисел:
         %                "p" должно быть меньше [FACE](ROW * COL).
-        % @a - параметр окна Хэмминга в интервале (0; 1].
         % @ORIG_FACE_PATH - полный путь к файлу - эталону.
-        function GPFM = GA_PCA_FACE_MORPFER(PATH, K, L, p, a, ORIG_FACE_PATH)
+        function GPFM = GA_PCA_FACE_MORPFER(PATH, K, L, p, ORIG_FACE_PATH)
             GPFM.K = K;
             GPFM.L = L;
             GPFM.p = p; 
-            GPFM.a = a;
             image = double(imread(ORIG_FACE_PATH));
             [GPFM.ROW, GPFM.COL] = size(image);
-            GPFM.ORIG_FACE = norma(image);
+           % GPFM.ORIG_FACE = norma(image);
+            GPFM.ORIG_FACE = image;
             GPFM.INITIAL_FACES_DATA = [];
             % Заполнение базы лиц для создания начальной популяции    
             DATA = 0; GPFM.MEAN_FACE = 0;
@@ -68,9 +63,8 @@ classdef GA_PCA_FACE_MORPFER < handle
                     
                     image = imread(path); 
                     image = double(image); 
-                    image = norma(image); 
+                   % image = norma(image); 
                     DATA = DATA + image;
-                    
                     GPFM.INITIAL_FACES_DATA = [GPFM.INITIAL_FACES_DATA image(:)];
                 end;
                 DATA = DATA / L;
@@ -79,8 +73,10 @@ classdef GA_PCA_FACE_MORPFER < handle
             GPFM.MEAN_FACE = GPFM.MEAN_FACE / K;
             % Нормируем базу лиц, вычитанием среднего лица
             for k = 1 : K
-                GPFM.INITIAL_FACES_DATA(:, k) = GPFM.INITIAL_FACES_DATA(:, k) - GPFM.MEAN_FACE(:);
-                GPFM.INITIAL_FACES_DATA(:, k) = GPFM.INITIAL_FACES_DATA(:, k) / norm(GPFM.INITIAL_FACES_DATA(:, k));
+                for l = 1 : L                  
+                GPFM.INITIAL_FACES_DATA(:, k*l) = GPFM.INITIAL_FACES_DATA(:, k*l) - GPFM.MEAN_FACE(:);                
+%                 GPFM.INITIAL_FACES_DATA(:, k*l) = GPFM.INITIAL_FACES_DATA(:, k*l) / norm(GPFM.INITIAL_FACES_DATA(:, k*l));
+                end
             end
             % Вычисление матрицы проекции данных в новое пространство.
             % Результат транспонируется, для прямой передачи данных в ga.
@@ -89,7 +85,7 @@ classdef GA_PCA_FACE_MORPFER < handle
             %   col - number of params (количество независимых параметров 
             %                           у каждого лица).
             [GPFM.A_KLT, ~, ~] = PCA_KL(GPFM.INITIAL_FACES_DATA, p);
-            GPFM.INV_A_KLT =  GPFM.A_KLT().';
+            GPFM.INV_A_KLT =  GPFM.A_KLT().';       
             GPFM.RED = (GPFM.A_KLT * GPFM.INITIAL_FACES_DATA).';
         end
         
@@ -102,12 +98,18 @@ classdef GA_PCA_FACE_MORPFER < handle
             % @ROW, COL - исходное разрешение изображения;
             % @ORIG_FACE - эталонное изображение;
             RECONSTRUCTED_DATA = GPFM.INV_A_KLT * FACE_PROJECTION.';
-            RECONSTRUCTED_IMAGE = norma(reshape(RECONSTRUCTED_DATA,[GPFM.ROW,GPFM.COL]));
+            RECONSTRUCTED_IMAGE = reshape(RECONSTRUCTED_DATA,[GPFM.ROW,GPFM.COL]);
             % ssim_index возвращает 1 при 100% подобии. Функция fitness для
             % GA при полном подобии требует значение равное 0, при этом 
             % значение должно находиться в интервале [0; +inf). Учитываем
             % этот факт при вычислении результата.
-            ssim = ssim_index(GPFM.ORIG_FACE, norma(RECONSTRUCTED_IMAGE + GPFM.MEAN_FACE));
+%               figure(11); clf;
+%               imshow(norma(RECONSTRUCTED_IMAGE+GPFM.MEAN_FACE)/255);
+%               disp(RECONSTRUCTED_IMAGE);
+%               pause;
+%              imshow(RECONSTRUCTED_IMAGE + GPFM.MEAN_FACE);
+%              pause;
+            ssim = ssim_index(GPFM.ORIG_FACE, (RECONSTRUCTED_IMAGE + GPFM.MEAN_FACE));
             GPFM.pushSSIM(ssim);
             fitness = abs(ssim - 1);
         end
