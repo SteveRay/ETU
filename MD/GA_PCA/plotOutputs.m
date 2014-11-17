@@ -41,13 +41,13 @@ function [state, options,optchanged] = plotOutputs(options,state,flag)
         end
         axes('Position',[0 0 1 1],'Xlim',[0 1],'Ylim',[0 1],'Box','off','Visible','off','Units','normalized', 'clipping' , 'off');
         text(0.5, 1, ['FACES GENERATION ¹', num2str(state.Generation)],'HorizontalAlignment','center','VerticalAlignment', 'top');
-        pause;
+%         pause(0.2);
     end
     if strcmp(flag, 'done')
         figure(2); clf; 
         x = 1:1:((state.Generation+1)*gpfm.L);
         plot(x, gpfm.SSIM_HISTORY);
-        title(['BEST SSIM = ', num2str(max(gpfm.SSIM_HISTORY)), '; MAX BASE SSIM = ', num2str(max(gpfm.SSIM_HISTORY(1:20)))]);
+        title(['BEST SSIM = ', num2str(max(gpfm.SSIM_HISTORY)), '; MAX BASE SSIM = ', num2str(max(gpfm.SSIM_HISTORY(1:gpfm.K*gpfm.L)))]);
         disp(max(gpfm.SSIM_HISTORY));
     end
 end

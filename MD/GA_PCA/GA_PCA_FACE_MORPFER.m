@@ -44,8 +44,12 @@ classdef GA_PCA_FACE_MORPFER < handle
             GPFM.K = K;
             GPFM.L = L;
             GPFM.p = p; 
-            image = double(imread(ORIG_FACE_PATH));
-            [GPFM.ROW, GPFM.COL] = size(image);
+            image = imread(ORIG_FACE_PATH);
+            [GPFM.ROW, GPFM.COL, Z] = size(image);
+            if Z > 1
+                image = rgb2gray(image);
+            end
+            image = double(image);
            % GPFM.ORIG_FACE = norma(image);
             GPFM.ORIG_FACE = image;
             GPFM.INITIAL_FACES_DATA = [];
@@ -62,6 +66,10 @@ classdef GA_PCA_FACE_MORPFER < handle
                     path = [PATH path_k '\' path_l '.jpg'];
                     
                     image = imread(path); 
+                    [~, ~, Z] = size(image);
+                    if Z > 1
+                         image = rgb2gray(image);
+                     end
                     image = double(image); 
                    % image = norma(image); 
                     DATA = DATA + image;
@@ -103,12 +111,6 @@ classdef GA_PCA_FACE_MORPFER < handle
             % GA при полном подобии требует значение равное 0, при этом 
             % значение должно находиться в интервале [0; +inf). Учитываем
             % этот факт при вычислении результата.
-%               figure(11); clf;
-%               imshow(norma(RECONSTRUCTED_IMAGE+GPFM.MEAN_FACE)/255);
-%               disp(RECONSTRUCTED_IMAGE);
-%               pause;
-%              imshow(RECONSTRUCTED_IMAGE + GPFM.MEAN_FACE);
-%              pause;
             ssim = ssim_index(GPFM.ORIG_FACE, (RECONSTRUCTED_IMAGE + GPFM.MEAN_FACE));
             GPFM.pushSSIM(ssim);
             fitness = abs(ssim - 1);
