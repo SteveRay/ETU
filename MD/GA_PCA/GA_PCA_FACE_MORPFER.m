@@ -111,7 +111,7 @@ classdef GA_PCA_FACE_MORPFER < handle
             % GA при полном подобии требует значение равное 0, при этом 
             % значение должно находиться в интервале [0; +inf). Учитываем
             % этот факт при вычислении результата.
-            ssim = ssim_index(GPFM.ORIG_FACE, (RECONSTRUCTED_IMAGE + GPFM.MEAN_FACE));
+            ssim = ssim_index(GPFM.ORIG_FACE, RECONSTRUCTED_IMAGE + GPFM.MEAN_FACE);
             GPFM.pushSSIM(ssim);
             fitness = abs(ssim - 1);
         end

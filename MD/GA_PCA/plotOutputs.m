@@ -35,13 +35,13 @@ function [state, options,optchanged] = plotOutputs(options,state,flag)
         figure(1); clf;  
         for i = 1 : (gpfm.L)
           RECONSTRUCTED_DATA = gpfm.INV_A_KLT * state.Population(i, :).';
-          RECONSTRUCTED_IMAGE = norma(reshape(RECONSTRUCTED_DATA,[gpfm.ROW, gpfm.COL]));
-          subplot(4,5,i); imshow(norma(RECONSTRUCTED_IMAGE + gpfm.MEAN_FACE)/256); 
+          RECONSTRUCTED_IMAGE = reshape(RECONSTRUCTED_DATA,[gpfm.ROW, gpfm.COL]);
+          subplot(4,5,i); imshow(uint8(RECONSTRUCTED_IMAGE + gpfm.MEAN_FACE)); 
           title(num2str(gpfm.SSIM_HISTORY(i*(state.Generation+1))));
         end
         axes('Position',[0 0 1 1],'Xlim',[0 1],'Ylim',[0 1],'Box','off','Visible','off','Units','normalized', 'clipping' , 'off');
         text(0.5, 1, ['FACES GENERATION ¹', num2str(state.Generation)],'HorizontalAlignment','center','VerticalAlignment', 'top');
-%         pause(0.2);
+        % pause%(0.2);
     end
     if strcmp(flag, 'done')
         figure(2); clf; 
