@@ -3,7 +3,7 @@ PATH = 'D:\Education\SPbETU\MD\EvoFIT\GA\БАЗЫ ДЛЯ ТЕСТОВ\';
 K = 1;
 L = 20;
 p = 20;
-ORIG_FACE_PATH = 'D:\Education\SPbETU\MD\EvoFIT\GA\БАЗЫ ДЛЯ ТЕСТОВ\Base_Photo\03.jpg';
+ORIG_FACE_PATH = 'D:\Education\SPbETU\MD\EvoFIT\GA\БАЗЫ ДЛЯ ТЕСТОВ\Base_Sketch\01.jpg';
 RESULT_PATH = 'D:\Education\SPbETU\MD\EvoFIT\GA\ОТЧЕТЫ\RESULT_17.11.14\';
 %------------ Инициализация класса ----------------------------------------
 global gpfm;
@@ -11,9 +11,9 @@ gpfm = GA_PCA_FACE_MORPFER(PATH, K, L, p, ORIG_FACE_PATH);
 %------------ Задание опций алгоритма--------------------------------------
 options = gaoptimset('PopulationType', 'doubleVector',...
     'InitialPopulation', gpfm.RED,...
-    'CrossoverFraction', 0.8,...
+    'CrossoverFraction', 0,...
     'PopulationSize', L,...
-    'MutationFcn',{@mutationgaussian,1, 1},...
+    'MutationFcn', {@mutationuniform, 0.01},...
     'OutputFcns',@plotOutputs);
 %------------ Выполнение --------------------------------------------------
 [x, fval] = ga(@computeFitness, p, options);
@@ -30,4 +30,4 @@ subplot(1,2,2); imshow(sketch);
 title(['Generated sketch', ' SSIM = ', num2str(max(gpfm.SSIM_HISTORY))]);
 %--------------------------------------------------------------------------
 name = [RESULT_PATH, 'SSIM_', num2str(max(gpfm.SSIM_HISTORY)), '.jpg'];
-imwrite(sketch, name, 'jpg');
+% imwrite(sketch, name, 'jpg');
