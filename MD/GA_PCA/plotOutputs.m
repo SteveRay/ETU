@@ -36,7 +36,7 @@ function [state, options,optchanged] = plotOutputs(options,state,flag)
         for i = 1 : (gpfm.L)
           RECONSTRUCTED_DATA = gpfm.INV_A_KLT * state.Population(i, :).';
           RECONSTRUCTED_IMAGE = reshape(RECONSTRUCTED_DATA,[gpfm.ROW, gpfm.COL]);
-          subplot(4,5,i); imshow(uint8(RECONSTRUCTED_IMAGE + gpfm.MEAN_FACE)); 
+          subplot(4,5,i); imshow(uint8(RECONSTRUCTED_IMAGE)); 
           title(num2str(gpfm.SSIM_HISTORY(i*(state.Generation+1))));
         end
         axes('Position',[0 0 1 1],'Xlim',[0 1],'Ylim',[0 1],'Box','off','Visible','off','Units','normalized', 'clipping' , 'off');

@@ -23,7 +23,6 @@ classdef GA_PCA_FACE_MORPFER < handle
         RED;
         ORIG_FACE;
         INITIAL_FACES_DATA;
-        MEAN_FACE;
         SSIM_HISTORY;
     end
     
@@ -53,8 +52,7 @@ classdef GA_PCA_FACE_MORPFER < handle
            % GPFM.ORIG_FACE = norma(image);
             GPFM.ORIG_FACE = image;
             GPFM.INITIAL_FACES_DATA = [];
-            % «аполнение базы лиц дл€ создани€ начальной попул€ции    
-            DATA = 0; GPFM.MEAN_FACE = 0;
+            % «аполнение базы лиц дл€ создани€ начальной попул€ции  
             for k = 1 : K
                 for l = 1 : L        
                     if k <= 9  
@@ -72,20 +70,9 @@ classdef GA_PCA_FACE_MORPFER < handle
                      end
                     image = double(image); 
                    % image = norma(image); 
-                    DATA = DATA + image;
                     GPFM.INITIAL_FACES_DATA = [GPFM.INITIAL_FACES_DATA image(:)];
                 end;
-                DATA = DATA / L;
-                GPFM.MEAN_FACE = GPFM.MEAN_FACE + DATA;
             end;
-            GPFM.MEAN_FACE = GPFM.MEAN_FACE / K;
-            % Ќормируем базу лиц, вычитанием среднего лица
-            for k = 1 : K
-                for l = 1 : L                  
-                GPFM.INITIAL_FACES_DATA(:, k*l) = GPFM.INITIAL_FACES_DATA(:, k*l) - GPFM.MEAN_FACE(:);                
-%                 GPFM.INITIAL_FACES_DATA(:, k*l) = GPFM.INITIAL_FACES_DATA(:, k*l) / norm(GPFM.INITIAL_FACES_DATA(:, k*l));
-                end
-            end
             % ¬ычисление матрицы проекции данных в новое пространство.
             % –езультат транспонируетс€, дл€ пр€мой передачи данных в ga.
             % ѕравила дл€ передачи начальной попул€ции в ga функцию:
@@ -111,7 +98,7 @@ classdef GA_PCA_FACE_MORPFER < handle
             % GA при полном подобии требует значение равное 0, при этом 
             % значение должно находитьс€ в интервале [0; +inf). ”читываем
             % этот факт при вычислении результата.
-            ssim = ssim_index(GPFM.ORIG_FACE, RECONSTRUCTED_IMAGE + GPFM.MEAN_FACE);
+            ssim = ssim_index(GPFM.ORIG_FACE, RECONSTRUCTED_IMAGE);
             GPFM.pushSSIM(ssim);
             fitness = abs(ssim - 1);
         end
