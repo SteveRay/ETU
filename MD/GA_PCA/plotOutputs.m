@@ -1,6 +1,6 @@
 function [state, options,optchanged] = plotOutputs(options,state,flag)
     global gpfm
-    
+%   Вывод результата каждой итерации ГА    
 %   STATE: A structure containing the following information about the state 
 %   of the optimization:
 %             Population: Population in the current generation
@@ -31,6 +31,8 @@ function [state, options,optchanged] = plotOutputs(options,state,flag)
             disp('Performing final task');
         otherwise;
      end
+     
+     % Вывод сгенерированного поколения с индексами подобия
     if ~strcmp(flag, 'done')
         figure(1); clf;  
         for i = 1 : (gpfm.L)
@@ -41,8 +43,10 @@ function [state, options,optchanged] = plotOutputs(options,state,flag)
         end
         axes('Position',[0 0 1 1],'Xlim',[0 1],'Ylim',[0 1],'Box','off','Visible','off','Units','normalized', 'clipping' , 'off');
         text(0.5, 1, ['FACES GENERATION №', num2str(state.Generation)],'HorizontalAlignment','center','VerticalAlignment', 'top');
-        % pause%(0.2);
+       %pause%(0.2);
     end
+    
+    % Вывод графика изменений индекса подобия
     if strcmp(flag, 'done')
         figure(2); clf; 
         x = 1:1:((state.Generation+1)*gpfm.L);
