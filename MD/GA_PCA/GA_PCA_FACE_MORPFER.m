@@ -63,7 +63,7 @@ classdef GA_PCA_FACE_MORPFER < handle
                         path_k = num2str(k);
                     end;
                     path_l = num2str(l); 
-                    path = [PATH path_k '\' path_l '.jpg'];
+                    path = [PATH path_k '/' path_l '.jpg'];
                     
                     image = imread(path); 
                     [~, ~, Z] = size(image);
